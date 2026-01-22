@@ -1,98 +1,127 @@
 import { useTeacherStats } from "./service/query/useTeacherStats";
-import { Wallet } from "lucide-react";
+import { Wallet, TrendingUp, TrendingDown, XCircle, DollarSign } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { PaymentsSkeleton } from "./components/payments-skeleton";
+import { useTranslation } from "react-i18next";
 
 export const Payments = () => {
+    const { t } = useTranslation();
     const { data: stats, isPending } = useTeacherStats();
-    const [filter, setFilter] = useState("Barchasi");
+    const [filter, setFilter] = useState(t("teacher.all"));
 
     const statCards = [
         {
-            title: "To'langan",
+            title: t("teacher.paid"),
             amount: stats?.paid?.amount || 0,
             count: stats?.paid?.count || 0,
-            color: "text-emerald-500",
-            countLabel: "ta to'lov",
+            color: "text-emerald-600 dark:text-emerald-400",
+            bgColor: "bg-emerald-50 dark:bg-emerald-500/10",
+            borderColor: "border-emerald-200 dark:border-emerald-500/20",
+            icon: TrendingUp,
+            iconColor: "text-emerald-500",
+            countLabel: t("teacher.payment_count"),
         },
         {
-            title: "To'lanmagan",
+            title: t("teacher.unpaid"),
             amount: stats?.unpaid?.amount || 0,
             count: stats?.unpaid?.count || 0,
-            color: "text-orange-500",
-            countLabel: "ta dars",
+            color: "text-orange-600 dark:text-orange-400",
+            bgColor: "bg-orange-50 dark:bg-orange-500/10",
+            borderColor: "border-orange-200 dark:border-orange-500/20",
+            icon: TrendingDown,
+            iconColor: "text-orange-500",
+            countLabel: t("teacher.lesson_count"),
         },
         {
-            title: "Bekor qilingan",
+            title: t("teacher.cancelled"),
             amount: stats?.cancelled?.amount || 0,
             count: stats?.cancelled?.count || 0,
-            color: "text-red-500",
-            countLabel: "ta",
+            color: "text-red-600 dark:text-red-400",
+            bgColor: "bg-red-50 dark:bg-red-500/10",
+            borderColor: "border-red-200 dark:border-red-500/20",
+            icon: XCircle,
+            iconColor: "text-red-500",
+            countLabel: t("teacher.payment_count"),
         },
     ];
 
     if (isPending) return <PaymentsSkeleton />;
 
     return (
-        <div className="p-4 md:p-8 space-y-8 min-h-screen">
+        <div className="p-4 md:p-8 space-y-8 min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors">
             <div className="space-y-1">
-                <h1 className="text-3xl font-bold text-slate-900">
-                    To'lovlarim
+                <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+                    {t("teacher.payments")}
                 </h1>
-                <p className="text-sm text-slate-500 font-medium">
-                    O'tkazilgan to'lovlar va statistika
+                <p className="text-sm text-slate-600 dark:text-slate-400 font-medium">
+                    {t("teacher.payments_subtitle")}
                 </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {statCards.map((card, index) => (
-                    <div
-                        key={index}
-                        className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-6"
-                    >
-                        <div className="space-y-1">
-                            <div className="flex items-center gap-1.5">
-                                <span className="text-[13px] font-bold text-slate-900">
-                                    {card.title}
-                                </span>
+                {statCards.map((card, index) => {
+                    const Icon = card.icon;
+                    return (
+                        <div
+                            key={index}
+                            className={cn(
+                                "bg-white dark:bg-slate-900 p-6 rounded-2xl border shadow-sm hover:shadow-md transition-all duration-300 space-y-6 group",
+                                card.borderColor
+                            )}
+                        >
+                            <div className="flex items-start justify-between">
+                                <div className="space-y-1">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                                            {card.title}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className={cn(
+                                    "p-2 rounded-lg group-hover:scale-110 transition-transform",
+                                    card.bgColor
+                                )}>
+                                    <Icon className={cn("w-5 h-5", card.iconColor)} />
+                                </div>
+                            </div>
+
+                            <div className="space-y-1">
+                                <div className="flex items-baseline gap-2">
+                                    <DollarSign className={cn("w-5 h-5", card.color)} />
+                                    <h2 className={cn("text-3xl font-bold", card.color)}>
+                                        {card.amount.toLocaleString()}
+                                    </h2>
+                                </div>
+                                <p className="text-xs text-slate-500 dark:text-slate-500 font-medium pl-7">
+                                    {card.count} {card.countLabel}
+                                </p>
                             </div>
                         </div>
-
-                        <div className="space-y-1">
-                            <h2
-                                className={cn("text-2xl font-bold", card.color)}
-                            >
-                                {card.amount.toLocaleString()} so'm
-                            </h2>
-                            <p className="text-[12px] text-slate-400 font-medium">
-                                {card.count} {card.countLabel}
-                            </p>
-                        </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
 
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-6">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 space-y-6 transition-colors">
                 <div className="space-y-1">
-                    <h3 className="text-sm font-bold text-slate-900">
-                        To'lovlar tarixi
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                        {t("teacher.payment_history")}
                     </h3>
-                    <p className="text-[12px] text-slate-400 font-medium">
-                        Sizga amalga oshirilgan barcha to'lovlar ro'yxati
+                    <p className="text-sm text-slate-500 dark:text-slate-400 font-medium">
+                        {t("teacher.payment_list")}
                     </p>
                 </div>
 
-                <div className="flex gap-2">
-                    {["Barchasi", "To'langan", "Bekor qilingan"].map((item) => (
+                <div className="flex gap-2 flex-wrap">
+                    {[t("teacher.all"), t("teacher.paid"), t("teacher.cancelled")].map((item, idx) => (
                         <button
-                            key={item}
+                            key={idx}
                             onClick={() => setFilter(item)}
                             className={cn(
-                                "px-4 py-1.5 rounded-lg text-[13px] font-medium transition-all border",
+                                "px-4 py-2 rounded-lg text-sm font-medium transition-all border",
                                 filter === item
-                                    ? "bg-slate-100 border-slate-200 text-slate-900"
-                                    : "bg-white border-transparent text-slate-500 hover:bg-slate-50"
+                                    ? "bg-slate-900 dark:bg-white border-slate-900 dark:border-white text-white dark:text-slate-900"
+                                    : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800"
                             )}
                         >
                             {item}
@@ -100,16 +129,19 @@ export const Payments = () => {
                     ))}
                 </div>
 
-                <div className="flex flex-col items-center justify-center py-20 space-y-3">
-                    <div className="w-12 h-12 bg-slate-50 rounded-xl flex items-center justify-center">
-                        <Wallet className="w-6 h-6 text-slate-300" />
+                <div className="flex flex-col items-center justify-center py-20 space-y-4">
+                    <div className="relative">
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 dark:from-blue-500/10 dark:to-purple-500/10 blur-2xl rounded-full"></div>
+                        <div className="relative w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center">
+                            <Wallet className="w-8 h-8 text-slate-400 dark:text-slate-600" />
+                        </div>
                     </div>
-                    <div className="text-center">
-                        <h4 className="text-sm font-bold text-slate-700">
-                            To'lovlar topilmadi
+                    <div className="text-center space-y-2">
+                        <h4 className="text-base font-bold text-slate-700 dark:text-slate-300">
+                            {t("teacher.no_payments")}
                         </h4>
-                        <p className="text-[12px] text-slate-400 font-medium">
-                            To'lovlar ro'yxati bo'sh
+                        <p className="text-sm text-slate-500 dark:text-slate-500 font-medium">
+                            {t("teacher.empty_list")}
                         </p>
                     </div>
                 </div>

@@ -9,9 +9,9 @@ interface ConfigType {
 
   TOKEN: {
     ACCESS_TOKEN_KEY: string;
-    ACCESS_TOKEN_TIME: number;
+    ACCESS_TOKEN_TIME: string | number;
     REFRESH_TOKEN_KEY: string;
-    REFRESH_TOKEN_TIME: number;
+    REFRESH_TOKEN_TIME: string | number;
     JWT_SECRET_KEY: string;
   };
 
@@ -54,9 +54,9 @@ export const config: ConfigType = {
 
   TOKEN: {
     ACCESS_TOKEN_KEY: String(process.env.ACCESS_TOKEN_KEY),
-    ACCESS_TOKEN_TIME: Number(process.env.ACCESS_TOKEN_TIME),
+    ACCESS_TOKEN_TIME: process.env.ACCESS_TOKEN_TIME || '1d',
     REFRESH_TOKEN_KEY: String(process.env.REFRESH_TOKEN_KEY),
-    REFRESH_TOKEN_TIME: Number(process.env.REFRESH_TOKEN_TIME),
+    REFRESH_TOKEN_TIME: process.env.REFRESH_TOKEN_TIME || '7d',
     JWT_SECRET_KEY: String(process.env.JWT_SECRET_KEY),
   },
 
@@ -72,13 +72,13 @@ export const config: ConfigType = {
     GOOGLE_CLIENT_SECRET: String(process.env.GOOGLE_CLIENT_SECRET),
   },
 
-  FRONTEND_URL: String(process.env.FRONTEND_URL || 'http://localhost:5173'), // Fallback qo'shildi
+  FRONTEND_URL: String(process.env.FRONTEND_URL || 'http://localhost:5173'),
   SWAGGER_URL: String(process.env.SWAGGER_URL),
   BACKEND_URL: String(process.env.BACKEND_URL),
 
   REDIS_HOST: String(process.env.REDIS_HOST),
   REDIS_PORT: Number(process.env.REDIS_PORT),
-  REDIS_PASSWORD: String(process.env.REDIS_PASSWORD),
+  REDIS_PASSWORD: process.env.REDIS_PASSWORD || '',
 
   TELEGRAM_BOT_TOKEN: String(process.env.TELEGRAM_BOT_TOKEN),
 
@@ -86,7 +86,7 @@ export const config: ConfigType = {
     MAIL_HOST: String(process.env.MAIL_HOST),
     MAIL_PASS: String(process.env.MAIL_PASS),
     MAIL_PORT: Number(process.env.MAIL_PORT),
-    MAIL_SECURE: String(process.env.NODE_ENV) === 'production', // development'da false
+    MAIL_SECURE: String(process.env.NODE_ENV) === 'production',
     MAIL_USER: String(process.env.MAIL_USER),
   },
 };

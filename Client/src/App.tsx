@@ -17,9 +17,12 @@ import Telegram from "./pages/student/telegram";
 import { TeacherLessons } from "./pages/teacher/lessons";
 import TeachersPage from "./pages/student/teacher";
 
+import "./i18n"; // Import i18n configuration
+import { ThemeProvider } from "./components/theme-provider";
+
 function App() {
   return (
-    <>
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <Toaster richColors position="top-right" />
       <Routes>
 
@@ -68,7 +71,7 @@ function App() {
 
         <Route path="*" element={<div>404 - Page Not Found</div>} />
       </Routes>
-    </>
+    </ThemeProvider>
   );
 }
 

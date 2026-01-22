@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { request } from '../../config/request'
-import { GraduationCap } from 'lucide-react'
+
 
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:2026/api/v1'
 
@@ -10,7 +10,7 @@ const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:2026/api/v1'
 export const TeacherLogin = () => {
 
   const navigate = useNavigate()
-  const [email, setEmail] = useState('adham011905@gmail.com')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('Password123!')
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)

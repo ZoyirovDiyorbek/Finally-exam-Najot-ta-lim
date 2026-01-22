@@ -33,7 +33,7 @@ import { TransactionModule } from './transaction/transaction.module';
     JwtModule.register({
       global: true,
       secret: config.TOKEN.JWT_SECRET_KEY,
-      signOptions: { expiresIn: config.TOKEN.ACCESS_TOKEN_TIME },
+      signOptions: { expiresIn: config.TOKEN.ACCESS_TOKEN_TIME as any },
     }),
 
     RedisModule.forRoot({
@@ -50,4 +50,4 @@ import { TransactionModule } from './transaction/transaction.module';
     TransactionModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }

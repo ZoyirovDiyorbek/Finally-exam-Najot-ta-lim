@@ -14,14 +14,15 @@ import {
 import { ProfileSkeleton } from "./components/profile-skeleton";
 import { ProfileDetails } from "./components/profile-details";
 import type { TEACHER_SPECIFICATIONS } from "../auth/admin-type";
+import { useTranslation } from "react-i18next";
 
 type SpecificationType = keyof typeof TEACHER_SPECIFICATIONS;
 
 export const TeacherProfile = () => {
+    const { t } = useTranslation();
     const { data, isLoading, error, refetch } = useProfile();
     const [isEditing, setIsEditing] = useState(false);
     const [isChangingPassword, setIsChangingPassword] = useState(false);
-    console.log(data);
 
     const [editedData, setEditedData] = useState({
         fullName: "",
@@ -147,35 +148,34 @@ export const TeacherProfile = () => {
     };
 
     return (
-        <div className="min-h-screen p-4 md:p-8">
+        <div className="min-h-screen p-4 md:p-8 bg-slate-50 dark:bg-slate-950 transition-colors">
             <div className="mx-auto max-w-8xl space-y-6">
-                <div className="flex items-center justify-between">
-                    <h1 className="text-3xl font-bold text-slate-900">
-                        My Profile
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                    <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+                        {t("teacher.profile")}
                     </h1>
                     {!isEditing && !isChangingPassword && (
                         <div className="flex gap-3">
                             <Button
                                 variant="outline"
                                 onClick={handleEditClick}
-                                className="bg-white text-black"
+                                className="bg-white dark:bg-slate-900 text-black dark:text-white border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
                             >
-                                <Edit3 className="mr-2 h-4 w-4" /> Edit Profile
+                                <Edit3 className="mr-2 h-4 w-4" /> {t("teacher.edit_profile")}
                             </Button>
                             <Button
                                 variant="outline"
                                 onClick={() => setIsChangingPassword(true)}
-                                className="bg-white text-black"
+                                className="bg-white dark:bg-slate-900 text-black dark:text-white border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800"
                             >
-                                <Lock className="mr-2 h-4 w-4" /> Change
-                                Password
+                                <Lock className="mr-2 h-4 w-4" /> {t("teacher.change_password")}
                             </Button>
                         </div>
                     )}
                 </div>
 
-                <Card className="overflow-hidden border-none shadow-sm bg-white">
-                    <div className="h-24 w-full bg-linear-to-r from-sky-100 to-sky-200" />
+                <Card className="overflow-hidden border-none shadow-sm bg-white dark:bg-slate-900 transition-colors">
+                    <div className="h-24 w-full bg-gradient-to-r from-sky-100 to-sky-200 dark:from-sky-900/20 dark:to-sky-800/20" />
                     <div className="px-8 py-6">
                         <div className="relative flex flex-col items-center sm:flex-row sm:items-center sm:gap-10">
                             <div className="flex flex-col items-center">
@@ -237,10 +237,10 @@ export const TeacherProfile = () => {
                                 )}
                             </div>
                             <div className="mt-4 sm:mt-0 text-center sm:text-left pb-2">
-                                <h2 className="text-4xl font-bold text-slate-900">
+                                <h2 className="text-4xl font-bold text-slate-900 dark:text-white">
                                     {profile?.fullName}
                                 </h2>
-                                <p className="text-shadow-md text-slate-500">
+                                <p className="text-shadow-md text-slate-600 dark:text-slate-400">
                                     {profile?.email}
                                 </p>
                             </div>
@@ -249,16 +249,16 @@ export const TeacherProfile = () => {
                 </Card>
 
                 {isChangingPassword ? (
-                    <Card className="border-none shadow-sm p-8 bg-white">
+                    <Card className="border-none shadow-sm p-8 bg-white dark:bg-slate-900 transition-colors">
                         <div className="flex items-center gap-2 mb-8">
-                            <Lock className="h-5 w-5" />
-                            <h2 className="text-lg font-semibold">
-                                Change Password
+                            <Lock className="h-5 w-5 text-slate-700 dark:text-slate-300" />
+                            <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
+                                {t("teacher.change_password")}
                             </h2>
                         </div>
                         <div className="space-y-4 max-w-md">
                             <div className="space-y-2">
-                                <Label>Current Password</Label>
+                                <Label className="text-slate-700 dark:text-slate-300">{t("teacher.current_password")}</Label>
                                 <Input
                                     type="password"
                                     value={passwordData.currentPassword}
@@ -268,10 +268,11 @@ export const TeacherProfile = () => {
                                             currentPassword: e.target.value,
                                         })
                                     }
+                                    className="dark:bg-slate-950 dark:border-slate-700 dark:text-white"
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label>New Password</Label>
+                                <Label className="text-slate-700 dark:text-slate-300">{t("teacher.new_password")}</Label>
                                 <Input
                                     type="password"
                                     value={passwordData.newPassword}
@@ -281,10 +282,11 @@ export const TeacherProfile = () => {
                                             newPassword: e.target.value,
                                         })
                                     }
+                                    className="dark:bg-slate-950 dark:border-slate-700 dark:text-white"
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label>Confirm New Password</Label>
+                                <Label className="text-slate-700 dark:text-slate-300">{t("teacher.confirm_password")}</Label>
                                 <Input
                                     type="password"
                                     value={passwordData.confirmPassword}
@@ -294,32 +296,34 @@ export const TeacherProfile = () => {
                                             confirmPassword: e.target.value,
                                         })
                                     }
+                                    className="dark:bg-slate-950 dark:border-slate-700 dark:text-white"
                                 />
                             </div>
                             <div className="flex gap-3 pt-4">
                                 <Button
                                     onClick={handlePasswordChange}
                                     disabled={isChangingPass}
-                                    className="bg-black text-white"
+                                    className="bg-black dark:bg-white text-white dark:text-black hover:bg-slate-800 dark:hover:bg-slate-100"
                                 >
                                     {isChangingPass ? (
                                         <Loader2 className="animate-spin h-4 w-4 mr-2" />
                                     ) : (
                                         <Lock className="h-4 w-4 mr-2" />
-                                    )}{" "}
-                                    Update Password
+                                    )}
+                                    {t("teacher.update_password")}
                                 </Button>
                                 <Button
                                     variant="outline"
                                     onClick={handleCancel}
+                                    className="dark:bg-slate-950 dark:border-slate-700 dark:text-white dark:hover:bg-slate-900"
                                 >
-                                    Cancel
+                                    {t("teacher.cancel")}
                                 </Button>
                             </div>
                         </div>
                     </Card>
                 ) : (
-                    <Card className="border-none shadow-sm bg-white">
+                    <Card className="border-none shadow-sm bg-white dark:bg-slate-900 transition-colors">
                         <ProfileDetails
                             isEditing={isEditing}
                             profile={profile}

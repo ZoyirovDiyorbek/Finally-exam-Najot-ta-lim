@@ -4,6 +4,7 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  OnModuleInit,
   UnauthorizedException,
 } from '@nestjs/common';
 import { CreateTeacherDto } from './dto/create-teacher.dto';
@@ -26,13 +27,36 @@ export class TeacherService extends BaseService<
   CreateTeacherDto,
   UpdateTeacherDto,
   Teacher
-> {
+> implements OnModuleInit {
   constructor(
     @InjectRepository(Teacher) private readonly teacherRepo: TeacherRepository,
     @InjectRedis() private readonly redis: Redis,
     private readonly crypto: CryptoService,
   ) {
     super(teacherRepo);
+  }
+
+  async onModuleInit() {
+    const teacherEmail = 'dimaotkirovich@gmail.com';
+    const teacherPassword = "Z.D.O'.19.11.2006.";
+
+    const existingTeacher = await this.teacherRepo.findOne({
+      where: { email: teacherEmail }
+    });
+
+    if (!existingTeacher) {
+      const hashedPassword = await this.crypto.encrypt(teacherPassword);
+      const teacher = this.teacherRepo.create({
+        email: teacherEmail,
+        fullName: 'Diyor Zoyirov',
+        password: hashedPassword,
+        isActive: true,
+        isComplete: true,
+        phoneNumber: '+998000000000',
+        role: 'TEACHER' as any,
+      });
+      await this.teacherRepo.save(teacher);
+    }
   }
 
   async createIncompleteGoogleTeacher(data: any) {

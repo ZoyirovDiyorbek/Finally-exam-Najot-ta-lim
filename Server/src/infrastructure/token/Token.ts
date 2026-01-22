@@ -6,19 +6,27 @@ import { config } from 'src/config';
 
 @Injectable()
 export class TokenService {
-  constructor(private readonly jwt: JwtService) {}
+  constructor(private readonly jwt: JwtService) { }
 
   async accessToken(payload: IToken): Promise<string> {
+    const expiresIn =
+      typeof config.TOKEN.ACCESS_TOKEN_TIME === 'string'
+        ? config.TOKEN.ACCESS_TOKEN_TIME
+        : config.TOKEN.ACCESS_TOKEN_TIME * 24 * 60 * 60;
     return this.jwt.signAsync(payload, {
       secret: config.TOKEN.ACCESS_TOKEN_KEY,
-      expiresIn: config.TOKEN.ACCESS_TOKEN_TIME * 24 * 60 * 60,
+      expiresIn: expiresIn as any,
     });
   }
 
   async refreshToken(payload: IToken): Promise<string> {
+    const expiresIn =
+      typeof config.TOKEN.REFRESH_TOKEN_TIME === 'string'
+        ? config.TOKEN.REFRESH_TOKEN_TIME
+        : config.TOKEN.REFRESH_TOKEN_TIME * 24 * 60 * 60;
     return this.jwt.signAsync(payload, {
       secret: config.TOKEN.REFRESH_TOKEN_KEY,
-      expiresIn: config.TOKEN.REFRESH_TOKEN_TIME * 24 * 60 * 60,
+      expiresIn: expiresIn as any,
     });
   }
 

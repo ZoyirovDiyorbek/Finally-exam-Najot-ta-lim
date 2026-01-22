@@ -1,8 +1,9 @@
 import { useEffect } from "react"
 import { Navigate, Outlet } from "react-router-dom"
-import { SidebarProvider, SidebarTrigger } from "../components/ui/sidebar"
+import { SidebarProvider } from "../components/ui/sidebar"
 import type { Role } from "../pages/auth/types"
-import { AppSidebar } from "./navbar";
+import { AppSidebar } from "./navbar"
+import { DashboardHeader } from "./dashboard-header"
 
 export const TeacherLayout = () => {
   const token = localStorage.getItem('token')
@@ -16,19 +17,17 @@ export const TeacherLayout = () => {
     return <Navigate replace to="/teacher/login" />
   }
   return (
-  <SidebarProvider>
-    <AppSidebar role="teacher" />
+    <SidebarProvider>
+      <AppSidebar role="teacher" />
 
-    <main className="flex-1 min-w-0">
-      <div className="p-3 border-b">
-        <SidebarTrigger className="cursor-pointer border border-black p-2" />
-      </div>
+      <main className="flex-1 min-w-0">
+        <DashboardHeader />
 
-      <div className="px-6 py-6 bg-gray-100 min-h-screen">
-        <Outlet />
-      </div>
-    </main>
-  </SidebarProvider>
-)
+        <div className="px-6 py-6 bg-gray-100 dark:bg-gray-900 min-h-screen">
+          <Outlet />
+        </div>
+      </main>
+    </SidebarProvider>
+  )
 
 }
